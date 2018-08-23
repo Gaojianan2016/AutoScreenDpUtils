@@ -53,7 +53,7 @@ public class AutoScreenDpUtils {
         } else {
             try {
                 ApplicationInfo info = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
-                w = info.metaData.getFloat(WIDTH_DP);
+                w = info.metaData.getInt(WIDTH_DP, 0);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
