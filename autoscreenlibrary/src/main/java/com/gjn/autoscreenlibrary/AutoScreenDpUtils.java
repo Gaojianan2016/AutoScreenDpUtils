@@ -67,9 +67,7 @@ public class AutoScreenDpUtils {
         }
         log("-----------------------------------------------");
         log("默认AutoScreenDpUtils.isDebug为false");
-        log("initApplication start.");
         initApplication();
-        log("initApplication success.");
         log("-----------------------------------------------");
     }
 
@@ -101,15 +99,12 @@ public class AutoScreenDpUtils {
             public void onLowMemory() {
             }
         });
-        log("===============================================");
         log("oldDensity = " + oldDensity);
         log("oldDensityDpi = " + oldDensityDpi);
         log("oldScaledDensity = " + oldScaledDensity);
-        log("===============================================");
         log("newDensity => " + metrics.widthPixels + " / " + w + " = " + newDensity);
         log("newDensityDpi => " + newDensity + " * 160 = " + newDensityDpi);
         log("newScaledDensity => " + newDensity + " * (" + oldScaledDensity + " / " + oldDensity + ") = " + newScaledDensity);
-        log("===============================================");
     }
 
     public static void setCustomDensity(@NonNull final Activity activity) {
@@ -121,23 +116,31 @@ public class AutoScreenDpUtils {
     }
 
     private static void changeDensity(@NonNull Activity activity) {
-        boolean isChange = true;
-        if (activity instanceof IAutoCancel) {
-            isChange = false;
-        }
-        //将当前Activity设置成new
+        float density;
+        int densityDpi;
+        float scaledDensity;
         final DisplayMetrics activityMetrics = activity.getResources().getDisplayMetrics();
-        if (isChange) {
-            log(activity.getClass().getSimpleName() + " is change.");
-            activityMetrics.density = newDensity;
-            activityMetrics.densityDpi = newDensityDpi;
-            activityMetrics.scaledDensity = newScaledDensity;
-        } else {
-            log(activity.getClass().getSimpleName() + " not change.");
-            activityMetrics.density = oldDensity;
-            activityMetrics.densityDpi = oldDensityDpi;
-            activityMetrics.scaledDensity = oldScaledDensity;
+        if (activity instanceof IAutoCancel) {
+            density = oldDensity;
+            densityDpi = oldDensityDpi;
+            scaledDensity = oldScaledDensity;
+            log("default Density");
+        }else if (activity instanceof IAutoChange) {
+            density = activityMetrics.widthPixels / ((IAutoChange) activity).newWidth();
+            densityDpi = (int) (density * 160);
+            scaledDensity = densityDpi * (oldScaledDensity / oldDensity);
+            log("new dp width = " + ((IAutoChange) activity).newWidth());
+            log("new Density = " + density);
+        }else {
+            density = newDensity;
+            densityDpi = newDensityDpi;
+            scaledDensity = newScaledDensity;
+            log("new dp width = " + w);
+            log("new Density = " + density);
         }
+        activityMetrics.density = density;
+        activityMetrics.densityDpi = densityDpi;
+        activityMetrics.scaledDensity = scaledDensity;
     }
 
     private static void log(String msg) {
