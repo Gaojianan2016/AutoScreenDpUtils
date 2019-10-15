@@ -128,7 +128,7 @@ public class AutoScreenDpUtils {
         }else if (activity instanceof IAutoChange) {
             density = activityMetrics.widthPixels / ((IAutoChange) activity).newWidth();
             densityDpi = (int) (density * 160);
-            scaledDensity = densityDpi * (oldScaledDensity / oldDensity);
+            scaledDensity = density * (oldScaledDensity / oldDensity);
             log("new dp width = " + ((IAutoChange) activity).newWidth());
             log("new Density = " + density);
         }else {
