@@ -6,9 +6,10 @@ import android.content.ComponentCallbacks;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 /**
  * @author gjn
@@ -128,15 +129,17 @@ public class AutoScreenDpUtils {
         }else if (activity instanceof IAutoChange) {
             density = activityMetrics.widthPixels / ((IAutoChange) activity).newWidth();
             densityDpi = (int) (density * 160);
-            scaledDensity = densityDpi * (oldScaledDensity / oldDensity);
-            log("new dp width = " + ((IAutoChange) activity).newWidth());
+            scaledDensity = density * (oldScaledDensity / oldDensity);
             log("new Density = " + density);
+            log("new dp width = " + ((IAutoChange) activity).newWidth());
+            log("new ScaledDensity = " + scaledDensity);
         }else {
             density = newDensity;
             densityDpi = newDensityDpi;
             scaledDensity = newScaledDensity;
-            log("new dp width = " + w);
             log("new Density = " + density);
+            log("new dp width = " + w);
+            log("new ScaledDensity = " + scaledDensity);
         }
         activityMetrics.density = density;
         activityMetrics.densityDpi = densityDpi;
